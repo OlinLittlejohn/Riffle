@@ -1,571 +1,367 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>RiverRead PNW — Know Before You Go</title>
+  <title>RiverRead PNW — Oregon River Conditions</title>
   <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --teal:    #00C2A8;
-      --blue:    #1A6EFF;
-      --sky:     #5DD4F0;
-      --green:   #3DDC84;
-      --orange:  #FF7B2E;
-      --yellow:  #FFD93D;
-      --dark:    #0A1628;
-      --mid:     #0D2240;
-      --light:   #E8F6FF;
+      --teal:   #00C2A8;
+      --blue:   #1A6EFF;
+      --sky:    #5DD4F0;
+      --green:  #3DDC84;
+      --orange: #FF7B2E;
+      --yellow: #FFD93D;
+      --red:    #FF4D6D;
+      --dark:   #0A1628;
+      --mid:    #0D2240;
+      --panel:  #0f1e36;
+      --light:  #E8F6FF;
     }
+    html, body { height: 100%; font-family: 'Nunito', sans-serif; background: var(--dark); color: var(--light); overflow: hidden; }
 
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Nunito', sans-serif;
-      background: var(--dark);
-      color: var(--light);
-      overflow-x: hidden;
-    }
-
-    /* ── ANIMATED RIVER BACKGROUND ── */
-    .river-bg {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      background: linear-gradient(170deg, #061220 0%, #0D2240 50%, #091A2E 100%);
-      overflow: hidden;
-    }
-    .river-bg::before {
-      content: '';
-      position: absolute;
-      bottom: -60px; left: -10%;
-      width: 120%; height: 220px;
-      background: linear-gradient(180deg, transparent, rgba(0,194,168,.18), rgba(26,110,255,.22));
-      border-radius: 50% 50% 0 0 / 40px 40px 0 0;
-      animation: riverSway 8s ease-in-out infinite alternate;
-    }
-    .river-bg::after {
-      content: '';
-      position: absolute;
-      bottom: -40px; left: -5%;
-      width: 110%; height: 140px;
-      background: linear-gradient(180deg, transparent, rgba(93,212,240,.12));
-      border-radius: 50% 50% 0 0 / 30px 30px 0 0;
-      animation: riverSway 6s ease-in-out infinite alternate-reverse;
-    }
-    @keyframes riverSway {
-      from { transform: translateX(-2%) scaleX(1.01); }
-      to   { transform: translateX(2%)  scaleX(.99); }
-    }
-
-    /* floating bubbles */
-    .bubble {
-      position: fixed;
-      border-radius: 50%;
-      opacity: .07;
-      animation: floatUp linear infinite;
-      pointer-events: none;
-    }
-    @keyframes floatUp {
-      0%   { transform: translateY(110vh) scale(1); opacity: .07; }
-      100% { transform: translateY(-10vh)  scale(1.3); opacity: 0; }
-    }
-
-    /* ── NAV ── */
     nav {
-      position: fixed; top: 0; left: 0; right: 0;
-      z-index: 100;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 18px 48px;
-      background: rgba(10,22,40,.7);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(93,212,240,.12);
+      padding: 14px 40px;
+      background: rgba(10,22,40,.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(93,212,240,.13);
+      height: 56px;
     }
-    .logo {
-      font-family: 'Righteous', cursive;
-      font-size: 1.5rem;
-      color: var(--sky);
-      letter-spacing: 1px;
-    }
+    .logo { font-family: 'Righteous', cursive; font-size: 1.4rem; color: var(--sky); }
     .logo span { color: var(--green); }
-    nav ul { list-style: none; display: flex; gap: 32px; }
-    nav ul a {
-      color: rgba(232,246,255,.7);
-      text-decoration: none;
-      font-weight: 700;
-      font-size: .95rem;
-      transition: color .2s;
-    }
-    nav ul a:hover { color: var(--sky); }
-    .nav-cta {
-      background: var(--teal);
-      color: var(--dark) !important;
-      padding: 8px 20px;
-      border-radius: 50px;
-      font-weight: 800 !important;
-    }
-    .nav-cta:hover { background: var(--sky) !important; color: var(--dark) !important; }
+    .nav-right { display: flex; align-items: center; gap: 20px; font-size: .88rem; font-weight: 700; color: rgba(232,246,255,.5); }
+    .live-dot { display: flex; align-items: center; gap: 6px; color: var(--green); }
+    .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); animation: pulse 1.8s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }
 
-    /* ── HERO ── */
-    .hero {
-      position: relative; z-index: 1;
-      min-height: 100vh;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      text-align: center;
-      padding: 120px 24px 80px;
+    .app {
+      position: fixed;
+      top: 56px; left: 0; right: 0; bottom: 0;
+      display: flex;
+      flex-direction: column;
     }
-    .fish-emoji {
-      font-size: 4rem;
-      animation: swim 3s ease-in-out infinite;
-      display: inline-block;
-      margin-bottom: 16px;
-    }
-    @keyframes swim {
-      0%,100% { transform: translateX(-8px) rotate(-3deg); }
-      50%      { transform: translateX(8px)  rotate(3deg); }
-    }
-    h1 {
-      font-family: 'Righteous', cursive;
-      font-size: clamp(2.8rem, 7vw, 5.5rem);
-      line-height: 1.05;
-      margin-bottom: 16px;
-      background: linear-gradient(135deg, var(--sky) 0%, var(--green) 50%, var(--yellow) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      filter: drop-shadow(0 0 40px rgba(93,212,240,.3));
-    }
-    .tagline {
-      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
-      color: rgba(232,246,255,.75);
-      max-width: 560px;
-      line-height: 1.6;
-      margin-bottom: 40px;
-      font-weight: 600;
-    }
-    .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
-    .btn-primary {
-      background: linear-gradient(135deg, var(--teal), var(--blue));
-      color: #fff;
-      padding: 16px 36px;
-      border-radius: 50px;
-      font-family: 'Nunito', sans-serif;
-      font-size: 1.1rem;
-      font-weight: 800;
-      border: none; cursor: pointer;
-      box-shadow: 0 8px 32px rgba(0,194,168,.35);
-      transition: transform .2s, box-shadow .2s;
-      text-decoration: none;
-    }
-    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(0,194,168,.5); }
-    .btn-secondary {
-      background: transparent;
-      color: var(--sky);
-      padding: 15px 36px;
-      border-radius: 50px;
-      font-family: 'Nunito', sans-serif;
-      font-size: 1.1rem;
-      font-weight: 800;
-      border: 2px solid var(--sky);
-      cursor: pointer;
-      transition: background .2s, color .2s;
-      text-decoration: none;
-    }
-    .btn-secondary:hover { background: rgba(93,212,240,.12); }
 
-    /* scroll indicator */
-    .scroll-hint {
-      margin-top: 60px;
-      display: flex; flex-direction: column; align-items: center; gap: 8px;
-      color: rgba(232,246,255,.4);
-      font-size: .85rem;
-      animation: bounce 2s ease-in-out infinite;
-    }
-    @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
-    .scroll-hint svg { opacity: .5; }
-
-    /* ── RIVER STATUS CARDS ── */
-    .section { position: relative; z-index: 1; padding: 90px 24px; }
-    .section-label {
-      text-align: center;
-      font-family: 'Righteous', cursive;
-      font-size: .85rem;
-      letter-spacing: 3px;
-      color: var(--teal);
-      text-transform: uppercase;
-      margin-bottom: 12px;
-    }
-    h2 {
-      text-align: center;
-      font-family: 'Righteous', cursive;
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      margin-bottom: 48px;
-      color: #fff;
-    }
-    h2 span { color: var(--yellow); }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 24px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-    .card {
-      background: rgba(13,34,64,.7);
-      border: 1px solid rgba(93,212,240,.15);
-      border-radius: 20px;
-      padding: 28px 24px;
-      backdrop-filter: blur(8px);
-      transition: transform .25s, border-color .25s;
+    #map-wrap {
       position: relative;
-      overflow: hidden;
+      flex: 1 1 auto;
+      min-height: 0;
     }
-    .card::before {
-      content: '';
+
+    #map {
+      width: 100%;
+      height: 100%;
+      background: #0a1628;
+    }
+
+    .leaflet-container { background: #0d1f38 !important; }
+    .leaflet-tile { filter: brightness(.5) saturate(.5) hue-rotate(195deg); }
+    .leaflet-control-zoom a { background: var(--panel) !important; color: var(--sky) !important; border-color: rgba(93,212,240,.2) !important; font-weight: 700; }
+    .leaflet-control-attribution { background: rgba(10,22,40,.7) !important; color: rgba(232,246,255,.3) !important; font-size: .65rem; }
+    .leaflet-control-attribution a { color: rgba(232,246,255,.4) !important; }
+
+    .river-tooltip {
+      background: rgba(10,22,40,.92) !important;
+      border: 1px solid rgba(93,212,240,.3) !important;
+      color: var(--light) !important;
+      font-family: 'Nunito', sans-serif !important;
+      font-weight: 700 !important;
+      font-size: .82rem !important;
+      border-radius: 8px !important;
+      padding: 5px 10px !important;
+      box-shadow: 0 4px 20px rgba(0,0,0,.4) !important;
+    }
+
+    #map-hint {
       position: absolute;
-      top: 0; left: 0; right: 0; height: 3px;
-      border-radius: 20px 20px 0 0;
-    }
-    .card.green::before  { background: linear-gradient(90deg, var(--green), var(--teal)); }
-    .card.yellow::before { background: linear-gradient(90deg, var(--yellow), var(--orange)); }
-    .card.red::before    { background: linear-gradient(90deg, #FF4D6D, var(--orange)); }
-    .card:hover { transform: translateY(-6px); border-color: rgba(93,212,240,.4); }
-
-    .card-river { font-size: .8rem; color: var(--sky); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
-    .card-name  { font-family: 'Righteous', cursive; font-size: 1.3rem; margin-bottom: 16px; }
-    .card-stats { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
-    .stat-pill {
-      background: rgba(255,255,255,.07);
-      border-radius: 50px;
-      padding: 5px 12px;
-      font-size: .82rem;
-      font-weight: 700;
-      display: flex; align-items: center; gap: 5px;
-    }
-    .status-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 5px 14px;
-      border-radius: 50px;
-      font-size: .82rem;
-      font-weight: 800;
-    }
-    .status-badge.good    { background: rgba(61,220,132,.15); color: var(--green); border: 1px solid rgba(61,220,132,.3); }
-    .status-badge.caution { background: rgba(255,217,61,.15);  color: var(--yellow); border: 1px solid rgba(255,217,61,.3); }
-    .status-badge.high    { background: rgba(255,77,109,.15);  color: #FF4D6D; border: 1px solid rgba(255,77,109,.3); }
-    .dot { width: 7px; height: 7px; border-radius: 50%; }
-    .dot.good    { background: var(--green);  box-shadow: 0 0 6px var(--green); }
-    .dot.caution { background: var(--yellow); box-shadow: 0 0 6px var(--yellow); }
-    .dot.high    { background: #FF4D6D;       box-shadow: 0 0 6px #FF4D6D; }
-
-    /* ── FEATURES ── */
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 28px;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-    .feature {
-      text-align: center;
-      padding: 36px 24px;
-      border-radius: 20px;
-      background: rgba(13,34,64,.5);
-      border: 1px solid rgba(93,212,240,.1);
-      transition: transform .25s;
-    }
-    .feature:hover { transform: translateY(-5px); }
-    .feature-icon { font-size: 2.8rem; margin-bottom: 14px; }
-    .feature h3 { font-family: 'Righteous', cursive; font-size: 1.15rem; margin-bottom: 8px; color: var(--sky); }
-    .feature p  { font-size: .9rem; color: rgba(232,246,255,.6); line-height: 1.6; }
-
-    /* ── MAP TEASER ── */
-    .map-section {
-      position: relative; z-index: 1;
-      padding: 0 24px 90px;
-      text-align: center;
-    }
-    .map-mock {
-      max-width: 900px;
-      margin: 0 auto;
-      background: rgba(13,34,64,.8);
+      bottom: 20px; left: 50%; transform: translateX(-50%);
+      z-index: 900;
+      background: rgba(10,22,40,.88);
       border: 1px solid rgba(93,212,240,.2);
-      border-radius: 24px;
-      padding: 40px;
-      position: relative;
-      overflow: hidden;
-    }
-    .map-mock::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 30% 60%, rgba(0,194,168,.1) 0%, transparent 60%),
-                  radial-gradient(ellipse at 70% 30%, rgba(26,110,255,.1) 0%, transparent 60%);
-    }
-    .map-rivers {
-      display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;
-      position: relative;
-    }
-    .river-tag {
-      padding: 8px 18px;
       border-radius: 50px;
-      font-weight: 700;
-      font-size: .88rem;
-      cursor: pointer;
-      transition: transform .2s;
+      padding: 10px 22px;
+      font-size: .88rem; font-weight: 700;
+      color: rgba(232,246,255,.75);
+      pointer-events: none;
+      backdrop-filter: blur(8px);
+      transition: opacity .4s;
+      white-space: nowrap;
     }
-    .river-tag:hover { transform: scale(1.07); }
-    .river-tag.g { background: rgba(61,220,132,.2);  color: var(--green);  border: 1px solid rgba(61,220,132,.4); }
-    .river-tag.y { background: rgba(255,217,61,.2);  color: var(--yellow); border: 1px solid rgba(255,217,61,.4); }
-    .river-tag.r { background: rgba(255,77,109,.2);  color: #FF4D6D;       border: 1px solid rgba(255,77,109,.4); }
-    .river-tag.b { background: rgba(93,212,240,.2);  color: var(--sky);    border: 1px solid rgba(93,212,240,.4); }
+    #map-hint.hidden { opacity: 0; }
+
     .map-legend {
-      display: flex; justify-content: center; gap: 24px; margin-top: 24px;
-      flex-wrap: wrap; font-size: .82rem; font-weight: 700;
-    }
-    .legend-item { display: flex; align-items: center; gap: 6px; opacity: .8; }
-
-    /* ── CTA BANNER ── */
-    .cta-banner {
-      position: relative; z-index: 1;
-      margin: 0 24px 80px;
-      max-width: 900px;
-      margin-left: auto; margin-right: auto;
-      background: linear-gradient(135deg, rgba(0,194,168,.25), rgba(26,110,255,.25));
-      border: 1px solid rgba(93,212,240,.25);
-      border-radius: 28px;
-      padding: 56px 40px;
-      text-align: center;
-      overflow: hidden;
-    }
-    .cta-banner::before {
-      content: '🎣';
       position: absolute;
-      font-size: 8rem;
-      opacity: .06;
-      right: 5%;
-      top: 50%;
-      transform: translateY(-50%);
+      top: 14px; right: 14px;
+      z-index: 900;
+      background: rgba(10,22,40,.9);
+      border: 1px solid rgba(93,212,240,.15);
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-size: .78rem; font-weight: 700;
+      backdrop-filter: blur(8px);
     }
-    .cta-banner h2 { margin-bottom: 16px; font-size: clamp(1.6rem,3.5vw,2.4rem); }
-    .cta-banner p  { color: rgba(232,246,255,.7); margin-bottom: 32px; font-size: 1.05rem; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .map-legend h4 { font-family: 'Righteous', cursive; font-size: .8rem; color: var(--sky); margin-bottom: 10px; }
+    .leg { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; color: rgba(232,246,255,.8); }
+    .leg:last-child { margin-bottom: 0; }
+    .leg-line { width: 24px; height: 3px; border-radius: 2px; }
 
-    /* ── FOOTER ── */
-    footer {
-      position: relative; z-index: 1;
-      border-top: 1px solid rgba(93,212,240,.1);
-      padding: 32px 48px;
-      display: flex; justify-content: space-between; align-items: center;
-      flex-wrap: wrap; gap: 16px;
-      color: rgba(232,246,255,.4);
-      font-size: .85rem;
-    }
-    footer .logo { font-size: 1.1rem; }
-
-    /* ── ANIMATIONS ON LOAD ── */
-    .fade-up {
+    /* DATA PANEL */
+    #data-panel {
+      flex: 0 0 auto;
+      background: var(--panel);
+      border-top: 2px solid rgba(93,212,240,.15);
+      overflow: hidden;
+      max-height: 0;
       opacity: 0;
-      transform: translateY(30px);
-      animation: fadeUp .7s ease forwards;
+      transition: max-height .4s cubic-bezier(.4,0,.2,1), opacity .3s;
     }
-    @keyframes fadeUp {
-      to { opacity: 1; transform: translateY(0); }
+    #data-panel.open { max-height: 260px; opacity: 1; }
+
+    .panel-inner {
+      padding: 18px 36px 22px;
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+      flex-wrap: wrap;
     }
-    .delay-1 { animation-delay: .15s; }
-    .delay-2 { animation-delay: .3s; }
-    .delay-3 { animation-delay: .45s; }
-    .delay-4 { animation-delay: .6s; }
+
+    .panel-title-row {
+      flex: 0 0 100%;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .panel-title-left { display: flex; align-items: baseline; gap: 10px; }
+    .panel-river-name { font-family: 'Righteous', cursive; font-size: 1.45rem; color: #fff; }
+    .panel-region { font-size: .78rem; color: var(--sky); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; opacity: .85; }
+    .close-btn { background: none; border: none; cursor: pointer; color: rgba(232,246,255,.35); font-size: 1.3rem; line-height: 1; transition: color .2s; padding: 4px; }
+    .close-btn:hover { color: var(--light); }
+
+    .stat-cards { display: flex; gap: 12px; flex-wrap: wrap; }
+    .stat-card {
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(93,212,240,.12);
+      border-radius: 14px;
+      padding: 12px 18px;
+      min-width: 110px;
+      transition: border-color .2s, transform .2s;
+      cursor: default;
+    }
+    .stat-card:hover { border-color: rgba(93,212,240,.3); transform: translateY(-2px); }
+    .stat-icon { font-size: 1.2rem; margin-bottom: 3px; }
+    .stat-label { font-size: .7rem; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: rgba(232,246,255,.4); margin-bottom: 2px; }
+    .stat-value { font-family: 'Righteous', cursive; font-size: 1.15rem; color: #fff; }
+    .stat-unit { font-size: .7rem; color: rgba(232,246,255,.5); font-family: 'Nunito', sans-serif; font-weight: 600; }
+
+    .panel-right { display: flex; flex-direction: column; gap: 10px; }
+    .status-big {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 9px 18px; border-radius: 50px;
+      font-weight: 800; font-size: .95rem;
+    }
+    .status-big.good    { background: rgba(61,220,132,.15); color: var(--green);  border: 1.5px solid rgba(61,220,132,.35); }
+    .status-big.caution { background: rgba(255,217,61,.15);  color: var(--yellow); border: 1.5px solid rgba(255,217,61,.35); }
+    .status-big.high    { background: rgba(255,77,109,.15);  color: var(--red);    border: 1.5px solid rgba(255,77,109,.35); }
+    .status-big.low     { background: rgba(255,123,46,.15);  color: var(--orange); border: 1.5px solid rgba(255,123,46,.35); }
+    .sdot { width: 8px; height: 8px; border-radius: 50%; }
+    .sdot.good    { background: var(--green);  box-shadow: 0 0 6px var(--green); }
+    .sdot.caution { background: var(--yellow); box-shadow: 0 0 6px var(--yellow); }
+    .sdot.high    { background: var(--red);    box-shadow: 0 0 6px var(--red); }
+    .sdot.low     { background: var(--orange); box-shadow: 0 0 6px var(--orange); }
+    .panel-note { font-size: .8rem; color: rgba(232,246,255,.45); max-width: 260px; line-height: 1.55; }
   </style>
 </head>
 <body>
 
-<!-- Animated background -->
-<div class="river-bg"></div>
-
-<!-- Floating bubbles -->
-<script>
-  for (let i = 0; i < 12; i++) {
-    const b = document.createElement('div');
-    b.className = 'bubble';
-    const size = Math.random() * 80 + 20;
-    b.style.cssText = `
-      width:${size}px; height:${size}px;
-      left:${Math.random()*100}%;
-      bottom:-${size}px;
-      background: hsl(${190 + Math.random()*60}, 80%, 60%);
-      animation-duration: ${8 + Math.random()*14}s;
-      animation-delay: ${Math.random()*10}s;
-    `;
-    document.body.appendChild(b);
-  }
-</script>
-
-<!-- NAV -->
 <nav>
   <div class="logo">River<span>Read</span> PNW</div>
-  <ul>
-    <li><a href="#conditions">Conditions</a></li>
-    <li><a href="#features">Features</a></li>
-    <li><a href="#rivers">Rivers</a></li>
-    <li><a href="#cta" class="nav-cta">Get Alerts</a></li>
-  </ul>
+  <div class="nav-right">
+    <div class="live-dot"><div class="pulse"></div> Live Data</div>
+    <span>Oregon</span>
+  </div>
 </nav>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="fish-emoji fade-up">🐟</div>
-  <h1 class="fade-up delay-1">Know Your River<br>Before You Go</h1>
-  <p class="tagline fade-up delay-2">
-    Real-time river conditions, flow rates, and fishing reports across the Pacific Northwest — so you spend less time guessing and more time casting.
-  </p>
-  <div class="hero-btns fade-up delay-3">
-    <a href="#conditions" class="btn-primary">🌊 Check Conditions</a>
-    <a href="#features"   class="btn-secondary">How It Works</a>
-  </div>
-  <div class="scroll-hint fade-up delay-4">
-    <span>Scroll to explore</span>
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-      <path d="M12 5v14M5 12l7 7 7-7"/>
-    </svg>
-  </div>
-</section>
-
-<!-- LIVE CONDITIONS -->
-<section class="section" id="conditions">
-  <p class="section-label">🌊 Live Data</p>
-  <h2>Current River <span>Conditions</span></h2>
-  <div class="cards">
-    <div class="card green">
-      <div class="card-river">Willamette River</div>
-      <div class="card-name">Portland Gauge 📍</div>
-      <div class="card-stats">
-        <div class="stat-pill">💧 4,820 cfs</div>
-        <div class="stat-pill">🌡️ 52°F</div>
-        <div class="stat-pill">👁️ 3.2 ft vis</div>
-      </div>
-      <div class="status-badge good"><div class="dot good"></div>Prime Fishing</div>
-    </div>
-    <div class="card yellow">
-      <div class="card-river">Deschutes River</div>
-      <div class="card-name">Maupin Section 🪝</div>
-      <div class="card-stats">
-        <div class="stat-pill">💧 3,100 cfs</div>
-        <div class="stat-pill">🌡️ 48°F</div>
-        <div class="stat-pill">👁️ 1.8 ft vis</div>
-      </div>
-      <div class="status-badge caution"><div class="dot caution"></div>Use Caution</div>
-    </div>
-    <div class="card red">
-      <div class="card-river">Sandy River</div>
-      <div class="card-name">Oxbow Park Area 🌲</div>
-      <div class="card-stats">
-        <div class="stat-pill">💧 9,400 cfs</div>
-        <div class="stat-pill">🌡️ 44°F</div>
-        <div class="stat-pill">👁️ 0.4 ft vis</div>
-      </div>
-      <div class="status-badge high"><div class="dot high"></div>Running High</div>
-    </div>
-    <div class="card green">
-      <div class="card-river">Clackamas River</div>
-      <div class="card-name">Estacada Gauge 🎣</div>
-      <div class="card-stats">
-        <div class="stat-pill">💧 2,650 cfs</div>
-        <div class="stat-pill">🌡️ 50°F</div>
-        <div class="stat-pill">👁️ 4.1 ft vis</div>
-      </div>
-      <div class="status-badge good"><div class="dot good"></div>Prime Fishing</div>
-    </div>
-  </div>
-</section>
-
-<!-- FEATURES -->
-<section class="section" id="features">
-  <p class="section-label">⚡ What We Do</p>
-  <h2>Everything You Need to <span>Reel In</span> the Day</h2>
-  <div class="features-grid">
-    <div class="feature">
-      <div class="feature-icon">📡</div>
-      <h3>Live Gauge Data</h3>
-      <p>Pulling directly from USGS stream gauges updated every 15 minutes across 40+ rivers.</p>
-    </div>
-    <div class="feature">
-      <div class="feature-icon">🌤️</div>
-      <h3>Weather Integration</h3>
-      <p>See how upstream precipitation will affect flow rates before you even pack your gear.</p>
-    </div>
-    <div class="feature">
-      <div class="feature-icon">🔔</div>
-      <h3>Custom Alerts</h3>
-      <p>Get a text or email when your favorite river hits your ideal fishing window.</p>
-    </div>
-    <div class="feature">
-      <div class="feature-icon">🗺️</div>
-      <h3>Interactive Map</h3>
-      <p>Color-coded river overlays across Oregon, Washington, and Idaho at a glance.</p>
-    </div>
-    <div class="feature">
-      <div class="feature-icon">📊</div>
-      <h3>Historical Trends</h3>
-      <p>Compare current conditions to historical averages to predict the best bite windows.</p>
-    </div>
-    <div class="feature">
-      <div class="feature-icon">🐟</div>
-      <h3>Species Reports</h3>
-      <p>Community-sourced catch reports filtered by species — steelhead, salmon, trout & more.</p>
-    </div>
-  </div>
-</section>
-
-<!-- MAP / RIVERS -->
-<div class="map-section" id="rivers">
-  <p class="section-label">🗺️ Coverage</p>
-  <h2 style="margin-bottom:32px">Rivers We <span>Track</span></h2>
-  <div class="map-mock">
-    <div class="map-rivers">
-      <div class="river-tag g">🟢 Willamette</div>
-      <div class="river-tag g">🟢 Clackamas</div>
-      <div class="river-tag y">🟡 Deschutes</div>
-      <div class="river-tag r">🔴 Sandy</div>
-      <div class="river-tag b">🔵 Columbia</div>
-      <div class="river-tag g">🟢 McKenzie</div>
-      <div class="river-tag y">🟡 Rogue</div>
-      <div class="river-tag g">🟢 John Day</div>
-      <div class="river-tag b">🔵 Yakima</div>
-      <div class="river-tag g">🟢 Cowlitz</div>
-      <div class="river-tag y">🟡 Snoqualmie</div>
-      <div class="river-tag r">🔴 Skykomish</div>
-      <div class="river-tag b">🔵 Snake</div>
-      <div class="river-tag g">🟢 Clearwater</div>
-      <div class="river-tag y">🟡 Salmon River</div>
-      <div class="river-tag g">🟢 Umpqua</div>
-    </div>
+<div class="app">
+  <div id="map-wrap">
+    <div id="map"></div>
+    <div id="map-hint">🎣 Click any river to see current conditions</div>
     <div class="map-legend">
-      <div class="legend-item"><div class="dot good"></div> Prime Fishing</div>
-      <div class="legend-item"><div class="dot caution"></div> Use Caution</div>
-      <div class="legend-item"><div class="dot high"></div> Running High</div>
-      <div class="legend-item" style="color:var(--sky)">🔵 Major River</div>
+      <h4>CONDITIONS</h4>
+      <div class="leg"><div class="leg-line" style="background:#3DDC84"></div> Prime Fishing</div>
+      <div class="leg"><div class="leg-line" style="background:#FFD93D"></div> Use Caution</div>
+      <div class="leg"><div class="leg-line" style="background:#FF4D6D"></div> Running High</div>
+      <div class="leg"><div class="leg-line" style="background:#FF7B2E"></div> Running Low</div>
+    </div>
+  </div>
+
+  <div id="data-panel">
+    <div class="panel-inner">
+      <div class="panel-title-row">
+        <div class="panel-title-left">
+          <span class="panel-river-name" id="panel-name"></span>
+          <span class="panel-region" id="panel-region"></span>
+        </div>
+        <button class="close-btn" onclick="closePanel()">✕</button>
+      </div>
+      <div class="stat-cards" id="stat-cards"></div>
+      <div class="panel-right">
+        <div class="status-big" id="status-badge"></div>
+        <div class="panel-note" id="panel-note"></div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- CTA -->
-<div class="cta-banner" id="cta">
-  <h2>Never Miss a <span style="color:var(--yellow)">Perfect Day</span> on the Water</h2>
-  <p>Sign up for free alerts and get notified the moment your river hits prime conditions.</p>
-  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-    <a href="#" class="btn-primary">🎣 Get Free Alerts</a>
-    <a href="#" class="btn-secondary">View All Rivers</a>
-  </div>
-</div>
+<script>
+const rivers = [
+  {
+    name: "Willamette River", region: "Northwest Oregon",
+    status: "good", statusLabel: "Prime Fishing",
+    flow: "4,820", flowUnit: "cfs", level: "5.2", levelUnit: "ft",
+    clarity: "Clear", clarityUnit: "3–4 ft vis", temp: "52", tempUnit: "°F",
+    note: "Great steelhead conditions. Flows slightly above average for the season.",
+    coords: [[43.55,-123.25],[43.80,-123.3],[44.05,-123.25],[44.30,-123.1],[44.55,-123.05],[44.80,-123.0],[44.98,-123.1],[45.20,-123.2],[45.40,-123.1],[45.52,-123.0],[45.68,-122.68],[45.60,-122.72],[45.52,-122.76],[45.35,-122.82],[45.18,-122.87],[45.06,-122.95]]
+  },
+  {
+    name: "Deschutes River", region: "Central Oregon",
+    status: "caution", statusLabel: "Use Caution",
+    flow: "3,100", flowUnit: "cfs", level: "4.8", levelUnit: "ft",
+    clarity: "Slightly Turbid", clarityUnit: "1–2 ft vis", temp: "48", tempUnit: "°F",
+    note: "Recent rainfall elevated flows. Murky near Maupin. Wading possible but watch footing.",
+    coords: [[43.65,-121.60],[43.85,-121.55],[44.05,-121.50],[44.24,-121.43],[44.42,-121.43],[44.60,-121.42],[44.78,-121.38],[44.98,-121.32],[45.20,-121.30],[45.40,-121.35],[45.55,-121.42],[45.70,-121.50]]
+  },
+  {
+    name: "Sandy River", region: "NW Oregon / Mt. Hood",
+    status: "high", statusLabel: "Running High",
+    flow: "9,400", flowUnit: "cfs", level: "8.6", levelUnit: "ft",
+    clarity: "Turbid", clarityUnit: "< 0.5 ft vis", temp: "44", tempUnit: "°F",
+    note: "Heavy snowmelt from Mt. Hood. Not recommended for wading. Dangerous conditions.",
+    coords: [[45.36,-122.50],[45.38,-122.35],[45.40,-122.20],[45.42,-122.05],[45.45,-121.90],[45.48,-121.75]]
+  },
+  {
+    name: "Clackamas River", region: "NW Oregon",
+    status: "good", statusLabel: "Prime Fishing",
+    flow: "2,650", flowUnit: "cfs", level: "4.1", levelUnit: "ft",
+    clarity: "Clear", clarityUnit: "4+ ft vis", temp: "50", tempUnit: "°F",
+    note: "Excellent conditions near Estacada. Chinook active in lower reaches.",
+    coords: [[45.38,-122.60],[45.28,-122.65],[45.12,-122.62],[45.15,-122.52],[45.22,-122.40],[45.30,-122.30],[45.35,-122.20]]
+  },
+  {
+    name: "Rogue River", region: "Southern Oregon",
+    status: "good", statusLabel: "Prime Fishing",
+    flow: "3,800", flowUnit: "cfs", level: "4.5", levelUnit: "ft",
+    clarity: "Clear", clarityUnit: "3–5 ft vis", temp: "55", tempUnit: "°F",
+    note: "World-class steelhead fishing. Gold Beach section particularly productive right now.",
+    coords: [[42.43,-122.55],[42.48,-122.80],[42.50,-123.00],[42.52,-123.20],[42.48,-123.40],[42.45,-123.55],[42.42,-123.70],[42.40,-123.90],[42.38,-124.10],[42.35,-124.35]]
+  },
+  {
+    name: "Umpqua River", region: "Southern Oregon",
+    status: "caution", statusLabel: "Use Caution",
+    flow: "5,200", flowUnit: "cfs", level: "6.1", levelUnit: "ft",
+    clarity: "Slightly Turbid", clarityUnit: "1.5 ft vis", temp: "53", tempUnit: "°F",
+    note: "North Umpqua clearing. South fork still elevated after weekend rain.",
+    coords: [[43.65,-122.95],[43.55,-123.15],[43.42,-123.30],[43.28,-123.40],[43.18,-123.50],[43.12,-123.65],[43.22,-123.80],[43.30,-123.95],[43.35,-124.10]]
+  },
+  {
+    name: "John Day River", region: "Eastern Oregon",
+    status: "low", statusLabel: "Running Low",
+    flow: "820", flowUnit: "cfs", level: "2.1", levelUnit: "ft",
+    clarity: "Clear", clarityUnit: "5+ ft vis", temp: "58", tempUnit: "°F",
+    note: "Unusually low for the season. Warm-water species only. Check current regulations.",
+    coords: [[44.72,-119.55],[44.60,-119.70],[44.50,-119.95],[44.55,-120.20],[44.65,-120.45],[44.78,-120.65],[45.00,-120.70],[45.15,-120.65],[45.25,-120.45],[45.45,-120.20],[45.55,-120.00],[45.70,-119.85]]
+  },
+  {
+    name: "McKenzie River", region: "Central Oregon",
+    status: "good", statusLabel: "Prime Fishing",
+    flow: "1,950", flowUnit: "cfs", level: "3.8", levelUnit: "ft",
+    clarity: "Crystal Clear", clarityUnit: "5+ ft vis", temp: "46", tempUnit: "°F",
+    note: "Spring Chinook beginning their run. Legendary clarity — bring polarized sunglasses.",
+    coords: [[44.05,-122.92],[44.10,-122.80],[44.12,-122.65],[44.10,-122.50],[44.06,-122.36],[44.05,-122.22],[44.08,-122.10],[44.10,-121.95]]
+  },
+  {
+    name: "Owyhee River", region: "Eastern Oregon",
+    status: "low", statusLabel: "Running Low",
+    flow: "340", flowUnit: "cfs", level: "1.6", levelUnit: "ft",
+    clarity: "Clear", clarityUnit: "4+ ft vis", temp: "62", tempUnit: "°F",
+    note: "Low reservoir releases. Canyon section great for dry-fly trout fishing.",
+    coords: [[43.20,-117.00],[43.00,-117.10],[42.55,-116.95],[42.38,-117.00],[42.20,-117.05],[42.10,-117.25]]
+  },
+  {
+    name: "Illinois River", region: "SW Oregon",
+    status: "good", statusLabel: "Prime Fishing",
+    flow: "1,200", flowUnit: "cfs", level: "3.2", levelUnit: "ft",
+    clarity: "Clear", clarityUnit: "3 ft vis", temp: "57", tempUnit: "°F",
+    note: "Remote wild steelhead river. Walk-in access only for most reaches. Worth the hike.",
+    coords: [[42.10,-123.50],[42.15,-123.38],[42.20,-123.28],[42.28,-123.20],[42.38,-123.18],[42.48,-123.22]]
+  }
+];
 
-<!-- FOOTER -->
-<footer>
-  <div class="logo">River<span style="color:var(--green)">Read</span> PNW</div>
-  <span>Data sourced from USGS & NOAA · Updated every 15 min</span>
-  <span>Made with 🐟 for PNW anglers</span>
-</footer>
+const statusColors = { good:'#3DDC84', caution:'#FFD93D', high:'#FF4D6D', low:'#FF7B2E' };
 
+const map = L.map('map', { center:[44.0,-120.5], zoom:7 });
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution:'© OpenStreetMap contributors', maxZoom:18
+}).addTo(map);
+
+let activePolyline = null;
+
+rivers.forEach(river => {
+  const color = statusColors[river.status];
+
+  // Glow layer
+  L.polyline(river.coords, { color, weight:12, opacity:.15, lineJoin:'round' }).addTo(map);
+
+  const poly = L.polyline(river.coords, {
+    color, weight:4, opacity:.88, lineJoin:'round', lineCap:'round'
+  }).addTo(map);
+
+  poly.bindTooltip(river.name, { className:'river-tooltip', sticky:true, offset:[10,0] });
+  poly.on('mouseover', () => { if(poly!==activePolyline) poly.setStyle({weight:7,opacity:1}); });
+  poly.on('mouseout',  () => { if(poly!==activePolyline) poly.setStyle({weight:4,opacity:.88}); });
+  poly.on('click', () => {
+    if(activePolyline && activePolyline!==poly) activePolyline.setStyle({weight:4,opacity:.88});
+    activePolyline = poly;
+    poly.setStyle({weight:7,opacity:1});
+    showPanel(river);
+  });
+  river._poly = poly;
+});
+
+function showPanel(r) {
+  document.getElementById('map-hint').classList.add('hidden');
+  document.getElementById('panel-name').textContent   = r.name;
+  document.getElementById('panel-region').textContent = r.region;
+  document.getElementById('panel-note').textContent   = r.note;
+
+  const badge = document.getElementById('status-badge');
+  badge.className = `status-big ${r.status}`;
+  badge.innerHTML = `<div class="sdot ${r.status}"></div>${r.statusLabel}`;
+
+  const stats = [
+    {icon:'💧', label:'Flow Rate',   value:r.flow,    unit:r.flowUnit},
+    {icon:'📏', label:'Water Level', value:r.level,   unit:r.levelUnit},
+    {icon:'👁️', label:'Clarity',     value:r.clarity, unit:r.clarityUnit},
+    {icon:'🌡️', label:'Water Temp',  value:r.temp,    unit:r.tempUnit},
+  ];
+  document.getElementById('stat-cards').innerHTML = stats.map(s=>`
+    <div class="stat-card">
+      <div class="stat-icon">${s.icon}</div>
+      <div class="stat-label">${s.label}</div>
+      <div class="stat-value">${s.value} <span class="stat-unit">${s.unit}</span></div>
+    </div>`).join('');
+
+  document.getElementById('data-panel').classList.add('open');
+}
+
+function closePanel() {
+  document.getElementById('data-panel').classList.remove('open');
+  if(activePolyline) { activePolyline.setStyle({weight:4,opacity:.88}); activePolyline=null; }
+  document.getElementById('map-hint').classList.remove('hidden');
+}
+</script>
 </body>
 </html>
