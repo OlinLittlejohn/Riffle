@@ -300,7 +300,9 @@ async function loadRivers() {
       body: 'data=' + encodeURIComponent(query)
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const json = await res.json();
+    const text = await res.text();
+    console.log('Raw Overpass response (first 500 chars):', text.substring(0, 500));
+    const json = JSON.parse(text);
     console.log(`Overpass returned ${json.elements.length} elements`);
     if (json.elements.length === 0) throw new Error('No elements returned');
     drawFromOSM(json.elements);
