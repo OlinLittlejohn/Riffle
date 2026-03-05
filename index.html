@@ -288,8 +288,10 @@ async function loadRivers() {
     "Molalla River","Calapooia River","Long Tom River"
   ]);
   const bbox = "41.9,-124.7,46.3,-116.4";
-  const nameUnion = riverNames.map(n => `way["waterway"~"river|stream"]["name"="${n}"](${bbox});`).join('\n');
-  const query = `[out:json][timeout:60];\n(\n${nameUnion}\n);\nout geom;`;
+  const nameUnion = riverNames.map(n =>
+    `way["waterway"="river"]["name"="${n}"](${bbox});\nway["waterway"="stream"]["name"="${n}"](${bbox});`
+  ).join('\n');
+  const query = `[out:json][timeout:90];\n(\n${nameUnion}\n);\nout geom;`;
 
   setStatus('Loading accurate river data from OpenStreetMap…');
   try {
