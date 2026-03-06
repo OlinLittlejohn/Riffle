@@ -218,7 +218,7 @@
       <div class="panel-title-left">
         <span class="panel-river-name" id="panel-name"></span>
         <span class="panel-region" id="panel-region"></span>
-        <div class="status-big" id="status-badge"></div>
+
       </div>
       <button class="close-btn" onclick="closePanel()">✕</button>
     </div>
@@ -717,9 +717,7 @@ async function showPanel(name, r) {
   document.getElementById('map-hint').classList.add('hidden');
   document.getElementById('panel-name').textContent   = name;
   document.getElementById('panel-region').textContent = r.region;
-  const badge = document.getElementById('status-badge');
-  badge.className = `status-big ${r.status}`;
-  badge.innerHTML = `<div class="sdot ${r.status}"></div>${r.statusLabel}`;
+
 
   document.getElementById('data-panel').classList.add('open');
 
