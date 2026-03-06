@@ -99,17 +99,7 @@
     }
     #map-hint.hidden { opacity:0; }
 
-    .map-legend {
-      position:absolute; top:14px; right:14px; z-index:700;
-      background:rgba(0,0,0,.92); border:1px solid var(--border);
-      border-radius:12px; padding:14px 16px;
-      font-size:.76rem; font-weight:700; backdrop-filter:blur(10px);
-      box-shadow:0 4px 24px rgba(0,0,0,.7);
-    }
-    .map-legend h4 { font-family:'Righteous',cursive; font-size:.78rem; color:var(--cerulean); margin-bottom:10px; letter-spacing:1px; text-transform:uppercase; }
-    .leg { display:flex; align-items:center; gap:8px; margin-bottom:6px; color:var(--text-dim); }
-    .leg:last-child { margin-bottom:0; }
-    .leg-line { width:22px; height:3px; border-radius:2px; }
+
 
     #error-banner {
       display:none; position:absolute; top:14px; left:50%; transform:translateX(-50%);
@@ -219,13 +209,7 @@
     </div>
     <div id="map-hint" class="hidden">🎣 Click any river to see current conditions</div>
     <div id="error-banner">⚠️ Could not load river data — check your connection and refresh</div>
-    <div class="map-legend">
-      <h4>Conditions</h4>
-      <div class="leg"><div class="leg-line" style="background:#3DDC84"></div> Prime Fishing</div>
-      <div class="leg"><div class="leg-line" style="background:#FFD93D"></div> Use Caution</div>
-      <div class="leg"><div class="leg-line" style="background:#FF4D6D"></div> Running High</div>
-      <div class="leg"><div class="leg-line" style="background:#FF7B2E"></div> Running Low</div>
-    </div>
+
   </div>
 
   <div id="data-panel">
@@ -563,7 +547,7 @@ const RIVER_DATA = {
   "Malheur River":     { region:"Eastern Oregon",       status:"low",     statusLabel:"Running Low",   note:"Dry year impacting flows. Best fishing near headwaters.",                          lat:43.98, lon:-117.70, usgsId:"13213000", nwrfcId:null,     city:"Vale, OR" },
 };
 
-const STATUS_COLORS = { good:'#3DDC84', caution:'#FFD93D', high:'#FF4D6D', low:'#FF7B2E' };
+const STATUS_COLORS = { good:'#2A9FD6', caution:'#2A9FD6', high:'#2A9FD6', low:'#2A9FD6' };
 const DEFAULT_COLOR = '#2A9FD6';
 
 const map = L.map('map', { center:[44.0,-120.5], zoom:7 });
