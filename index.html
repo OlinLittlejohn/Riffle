@@ -666,10 +666,11 @@ async function loadRivers() {
 }
 
 // ── NWS weather icon mapping ────────────────────────────────────────────────
-function nwsIcon(shortForecast) {
+function nwsIcon(shortForecast, tempF) {
   const f = shortForecast.toLowerCase();
+  const cold = tempF <= 35;
   if (f.includes('thunder')) return '⛈️';
-  if (f.includes('snow') || f.includes('blizzard')) return '❄️';
+  if ((f.includes('snow') || f.includes('blizzard')) && cold) return '❄️';
   if (f.includes('rain') || f.includes('shower') || f.includes('drizzle')) return '🌧️';
   if (f.includes('partly') || f.includes('mostly cloudy')) return '⛅';
   if (f.includes('cloudy') || f.includes('overcast')) return '☁️';
@@ -679,12 +680,13 @@ function nwsIcon(shortForecast) {
   return '🌤️';
 }
 
-function nwsSimple(shortForecast) {
+function nwsSimple(shortForecast, tempF) {
   const f = shortForecast.toLowerCase();
+  const cold = tempF <= 35;
   if (f.includes('thunder')) return 'Thunderstorm';
-  if (f.includes('blizzard')) return 'Blizzard';
-  if (f.includes('snow')) return 'Snow';
-  if (f.includes('freezing rain') || f.includes('sleet') || f.includes('ice')) return 'Freezing Rain';
+  if (f.includes('blizzard') && cold) return 'Blizzard';
+  if ((f.includes('snow') || f.includes('flurr')) && cold) return 'Snow';
+  if (f.includes('freezing rain') || f.includes('sleet') || (f.includes('ice') && cold)) return 'Freezing Rain';
   if (f.includes('heavy rain')) return 'Heavy Rain';
   if (f.includes('rain') || f.includes('shower') || f.includes('drizzle')) return 'Rain';
   if (f.includes('fog')) return 'Foggy';
@@ -766,9 +768,9 @@ async function showPanel(name, r) {
       days.map(p => `
         <div class="weather-card">
           <div class="w-day">${p.name.replace('This ', '').substring(0,3)}</div>
-          <div class="w-icon">${nwsIcon(p.shortForecast)}</div>
+          <div class="w-icon">${nwsIcon(p.shortForecast, p.temperature)}</div>
           <div class="w-hi">${p.temperature}°${p.temperatureUnit}</div>
-          <div class="w-desc">${nwsSimple(p.shortForecast)}</div>
+          <div class="w-desc">${nwsSimple(p.shortForecast, p.temperature)}</div>
         </div>`).join('') +
       '</div>';
   } else {
