@@ -226,19 +226,19 @@
     <div class="panel-body">
       <!-- Col 1: Live USGS stats -->
       <div class="panel-col" id="panel-stats">
-        <div class="panel-col-title">📡 Live Conditions</div>
+        <div class="panel-col-title">Live Conditions</div>
         <div class="stat-cards" id="stat-cards">
           <div class="stat-loading">Loading gauge data…</div>
         </div>
       </div>
       <!-- Col 2: 5-day weather -->
       <div class="panel-col" id="panel-weather">
-        <div class="panel-col-title" id="weather-title">🌤️ 5-Day Forecast</div>
+        <div class="panel-col-title" id="weather-title">5-Day Forecast</div>
         <div id="weather-cards"><div class="stat-loading">Loading forecast…</div></div>
       </div>
       <!-- Col 3: Hydrograph -->
       <div class="panel-col panel-col-wide" id="panel-hydro">
-        <div class="panel-col-title">📈 Water Level Trend</div>
+        <div class="panel-col-title">Water Level Trend</div>
         <div id="hydro-wrap"></div>
       </div>
     </div>
@@ -250,7 +250,7 @@
 <!-- SPECIES TAB -->
 <div id="tab-species" class="tab-panel" style="display:none;position:fixed;top:58px;left:0;right:0;bottom:0;overflow-y:auto;background:var(--black);padding:40px 24px;">
   <div style="max-width:1100px;margin:0 auto;">
-    <h2 style="font-family:'Righteous',cursive;font-size:2rem;color:var(--sky);margin-bottom:8px;">Oregon River Species</h2>
+    <h2 style="font-family:'Righteous',cursive;font-size:2rem;color:var(--sky);margin-bottom:8px;">Oregon River 🐟 Species</h2>
     <p style="color:var(--text-dim);margin-bottom:36px;font-size:.95rem;">Common sportfish found in Oregon's rivers and waterways.</p>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;">
       
@@ -698,7 +698,7 @@ async function showPanel(name, r) {
   document.getElementById('data-panel').classList.add('open');
 
   // Reset columns to loading state
-  document.getElementById('weather-title').textContent = `🌤️ Forecast — ${r.city}`;
+  document.getElementById('weather-title').textContent = `Forecast — ${r.city}`;
   document.getElementById('weather-cards').innerHTML = '<div class="stat-loading">⏳ Fetching forecast…</div>';
 
   // ── Live conditions: skip if no gauge ──
