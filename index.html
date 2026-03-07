@@ -603,12 +603,16 @@ async function loadRivers() {
     "Molalla River","Calapooia River","Long Tom River"
   ]);
   const bbox = "41.9,-124.7,46.3,-116.4";
+  // Exclude John Day River from Overpass — multiple rivers share this name in OSM;
+  // the wrong one (near Portland/Astoria) gets pulled. Use baked geometry instead.
+  const overpassExclude = new Set(["John Day River"]);
 
   // Split into batches of 5 to avoid Overpass timeout
   const batchSize = 5;
+  const filteredNames = riverNames.filter(n => !overpassExclude.has(n));
   const batches = [];
-  for (let i = 0; i < riverNames.length; i += batchSize) {
-    batches.push(riverNames.slice(i, i + batchSize));
+  for (let i = 0; i < filteredNames.length; i += batchSize) {
+    batches.push(filteredNames.slice(i, i + batchSize));
   }
 
   setStatus('Loading accurate river data from OpenStreetMap…');
