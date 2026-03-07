@@ -526,23 +526,8 @@
   </div>
 </div>
 
-const RIVER_GEOMETRY = {
-  "Willamette River":{"segments":[[[45.52,-122.67],[45.48,-122.68],[45.43,-122.70],[45.38,-122.72],[45.32,-122.74],[45.25,-122.76],[45.18,-122.78],[45.10,-122.80],[45.02,-122.83],[44.93,-122.85],[44.84,-122.87],[44.75,-122.89],[44.65,-122.90],[44.55,-122.91],[44.45,-122.92],[44.35,-122.93],[44.25,-122.94]]]},
-  "Deschutes River":{"segments":[[[45.10,-121.30],[45.04,-121.31],[44.97,-121.32],[44.90,-121.33],[44.83,-121.34],[44.76,-121.35],[44.68,-121.36],[44.60,-121.37],[44.52,-121.38],[44.44,-121.39],[44.36,-121.40],[44.27,-121.41],[44.18,-121.42],[44.09,-121.43],[44.00,-121.44],[43.90,-121.45],[43.80,-121.46]]]},
-  "Sandy River":{"segments":[[[45.44,-122.25],[45.42,-122.16],[45.40,-122.07],[45.39,-121.98],[45.37,-121.89],[45.36,-121.80],[45.34,-121.71],[45.33,-121.62],[45.31,-121.53],[45.30,-121.44]]]},
-  "Clackamas River":{"segments":[[[45.29,-122.33],[45.27,-122.24],[45.24,-122.15],[45.22,-122.06],[45.20,-121.97],[45.19,-121.88],[45.18,-121.79],[45.17,-121.70],[45.16,-121.61],[45.15,-121.52]]]},
-  "Rogue River":{"segments":[[[42.44,-123.33],[42.42,-123.22],[42.40,-123.11],[42.38,-123.00],[42.36,-122.89],[42.35,-122.78],[42.34,-122.67],[42.33,-122.56],[42.32,-122.45],[42.31,-122.34],[42.30,-122.23],[42.29,-122.12],[42.29,-122.01],[42.29,-121.90]]]},
-  "Umpqua River":{"segments":[[[43.12,-123.65],[43.12,-123.54],[43.12,-123.43],[43.11,-123.32],[43.10,-123.21],[43.09,-123.10],[43.08,-122.99],[43.07,-122.88],[43.06,-122.77],[43.05,-122.66],[43.04,-122.55]]]},
-  "John Day River":{"segments":[[[44.75,-119.56],[44.71,-119.67],[44.68,-119.77],[44.65,-119.87],[44.62,-119.97],[44.60,-120.07],[44.58,-120.17],[44.56,-120.28],[44.55,-120.38],[44.55,-120.48],[44.55,-120.58],[44.57,-120.67],[44.58,-120.77],[44.60,-120.86],[44.62,-120.95],[44.65,-121.03],[44.67,-121.12],[44.71,-121.19],[44.75,-121.26],[44.79,-121.32],[44.83,-121.36],[44.88,-121.40],[44.93,-121.41],[44.99,-121.41],[45.04,-121.39],[45.09,-121.37],[45.13,-121.35],[45.18,-121.32],[45.23,-121.29],[45.28,-121.27],[45.34,-121.25],[45.39,-121.22],[45.44,-121.19],[45.49,-121.15],[45.53,-121.10],[45.56,-121.05],[45.59,-120.99],[45.62,-120.93],[45.64,-120.86],[45.66,-120.80]]]},
-  "McKenzie River":{"segments":[[[44.09,-121.93],[44.08,-122.00],[44.07,-122.06],[44.07,-122.12],[44.06,-122.18],[44.06,-122.24],[44.06,-122.30],[44.06,-122.37],[44.06,-122.43],[44.06,-122.49],[44.06,-122.55],[44.07,-122.61],[44.07,-122.66],[44.08,-122.72],[44.09,-122.78],[44.10,-122.84],[44.10,-122.89],[44.10,-122.94],[44.10,-123.05]]]},
-  "Owyhee River":{"segments":[[[42.07,-117.29],[42.10,-117.25],[42.14,-117.22],[42.19,-117.19],[42.23,-117.16],[42.28,-117.14],[42.33,-117.13],[42.38,-117.11],[42.43,-117.11],[42.48,-117.10],[42.53,-117.10],[42.59,-117.10],[42.64,-117.10],[42.69,-117.11],[42.74,-117.12],[42.79,-117.13],[42.84,-117.14],[42.89,-117.16],[42.93,-117.18],[42.98,-117.19],[43.03,-117.21],[43.07,-117.23],[43.11,-117.26]]]},
-  "Illinois River":{"segments":[[[42.31,-123.32],[42.25,-123.28],[42.20,-123.24],[42.15,-123.20],[42.10,-123.17],[42.06,-123.14],[42.03,-123.12],[42.00,-123.10]]]},
-  "Nehalem River":{"segments":[[[45.68,-123.60],[45.69,-123.50],[45.70,-123.40],[45.70,-123.30],[45.70,-123.20],[45.69,-123.10],[45.68,-123.00],[45.67,-122.90],[45.66,-122.80]]]},
-  "Siletz River":{"segments":[[[44.85,-123.70],[44.87,-123.60],[44.88,-123.50],[44.89,-123.40],[44.89,-123.30],[44.88,-123.20],[44.87,-123.10],[44.86,-123.00]]]},
-  "Coquille River":{"segments":[[[43.18,-124.00],[43.17,-123.90],[43.16,-123.80],[43.15,-123.70],[43.14,-123.60],[43.13,-123.50],[43.12,-123.40],[43.11,-123.30]]]},
-  "Powder River":{"segments":[[[44.80,-117.83],[44.78,-117.78],[44.76,-117.74],[44.73,-117.69],[44.70,-117.65],[44.67,-117.61],[44.64,-117.57],[44.61,-117.53],[44.58,-117.50],[44.55,-117.46],[44.51,-117.43],[44.48,-117.40],[44.45,-117.37],[44.42,-117.35]]]},
-  "Malheur River":{"segments":[[[43.98,-117.70],[43.95,-117.65],[43.92,-117.60],[43.89,-117.55],[43.86,-117.50],[43.83,-117.45],[43.80,-117.40],[43.77,-117.35],[43.74,-117.30],[43.71,-117.25],[43.68,-117.20],[43.65,-117.15]]]}
-};
+<script>
+const RIVER_GEOMETRY = {"Willamette River":{"segments":[[[43.554,-123.258],[43.612,-123.218],[43.693,-123.175],[43.789,-123.143],[43.848,-123.131],[43.951,-123.107],[44.056,-123.092],[44.153,-123.075],[44.232,-123.06],[44.326,-123.044],[44.422,-123.028],[44.508,-123.017],[44.62,-123.003],[44.703,-122.982],[44.792,-122.967],[44.883,-122.957],[44.951,-122.947],[45.014,-122.942],[45.088,-122.929],[45.174,-122.912],[45.265,-122.888],[45.342,-122.858],[45.421,-122.831],[45.487,-122.793],[45.527,-122.768],[45.582,-122.741],[45.638,-122.71],[45.683,-122.675]]]},"Deschutes River":{"segments":[[[43.644,-121.617],[43.71,-121.591],[43.779,-121.564],[43.852,-121.541],[43.923,-121.521],[43.995,-121.504],[44.067,-121.49],[44.148,-121.483],[44.236,-121.474],[44.326,-121.467],[44.415,-121.455],[44.499,-121.444],[44.572,-121.441],[44.643,-121.43],[44.714,-121.418],[44.789,-121.399],[44.858,-121.382],[44.923,-121.367],[44.985,-121.345],[45.046,-121.327],[45.108,-121.313],[45.17,-121.302],[45.232,-121.289],[45.299,-121.279],[45.367,-121.265],[45.43,-121.248],[45.49,-121.228],[45.545,-121.202],[45.598,-121.175],[45.647,-121.145],[45.687,-121.111]]]},"Sandy River":{"segments":[[[45.357,-121.771],[45.369,-121.847],[45.378,-121.918],[45.384,-121.985],[45.389,-122.052],[45.393,-122.119],[45.395,-122.186],[45.395,-122.251],[45.393,-122.314],[45.39,-122.378],[45.385,-122.433],[45.379,-122.49],[45.373,-122.542]]]},"Clackamas River":{"segments":[[[45.198,-121.94],[45.199,-122.003],[45.201,-122.062],[45.202,-122.118],[45.202,-122.178],[45.199,-122.236],[45.193,-122.292],[45.184,-122.345],[45.172,-122.394],[45.16,-122.441],[45.148,-122.488],[45.142,-122.534],[45.148,-122.577],[45.161,-122.611],[45.179,-122.636],[45.198,-122.657],[45.23,-122.667],[45.262,-122.66],[45.298,-122.648],[45.33,-122.63],[45.358,-122.608],[45.382,-122.581]]]},"Rogue River":{"segments":[[[42.432,-122.537],[42.462,-122.603],[42.489,-122.668],[42.513,-122.732],[42.53,-122.801],[42.537,-122.872],[42.533,-122.943],[42.526,-123.014],[42.519,-123.083],[42.51,-123.152],[42.498,-123.219],[42.482,-123.283],[42.465,-123.346],[42.449,-123.409],[42.434,-123.47],[42.419,-123.532],[42.406,-123.591],[42.393,-123.651],[42.381,-123.71],[42.371,-123.772],[42.362,-123.833],[42.352,-123.896],[42.343,-123.96],[42.334,-124.023],[42.325,-124.083],[42.316,-124.14],[42.309,-124.19],[42.299,-124.256],[42.288,-124.32],[42.273,-124.377]]]},"Umpqua River":{"segments":[[[43.634,-122.912],[43.594,-122.975],[43.556,-123.039],[43.522,-123.101],[43.494,-123.163],[43.469,-123.226],[43.447,-123.289],[43.428,-123.351],[43.41,-123.414]],[[43.659,-123.105],[43.629,-123.17],[43.601,-123.234],[43.576,-123.298],[43.553,-123.361],[43.531,-123.423],[43.51,-123.483],[43.49,-123.542],[43.475,-123.601],[43.462,-123.66],[43.45,-123.719],[43.437,-123.778],[43.424,-123.836],[43.412,-123.893],[43.399,-123.948],[43.387,-124.002],[43.374,-124.055],[43.361,-124.108]]]},"John Day River":{"segments":[[[44.749,-119.563],[44.714,-119.665],[44.681,-119.768],[44.65,-119.87],[44.621,-119.971],[44.596,-120.072],[44.575,-120.174],[44.559,-120.275],[44.55,-120.377],[44.548,-120.478],[44.554,-120.577],[44.566,-120.673],[44.582,-120.767],[44.601,-120.858],[44.621,-120.947],[44.645,-121.033],[44.673,-121.116],[44.709,-121.193],[44.748,-121.261],[44.789,-121.316],[44.833,-121.362],[44.883,-121.395],[44.934,-121.409],[44.985,-121.406],[45.037,-121.393],[45.086,-121.373],[45.131,-121.347],[45.177,-121.318],[45.226,-121.291],[45.281,-121.268],[45.338,-121.248],[45.393,-121.224],[45.443,-121.191],[45.488,-121.15],[45.526,-121.101],[45.56,-121.046],[45.59,-120.988],[45.617,-120.929],[45.642,-120.868],[45.663,-120.804]]]},"McKenzie River":{"segments":[[[44.091,-121.93],[44.082,-121.993],[44.074,-122.056],[44.068,-122.118],[44.063,-122.18],[44.059,-122.242],[44.057,-122.304],[44.056,-122.365],[44.057,-122.426],[44.06,-122.487],[44.064,-122.547],[44.069,-122.606],[44.075,-122.664],[44.082,-122.722],[44.089,-122.779],[44.095,-122.835],[44.1,-122.89],[44.103,-122.944],[44.104,-122.997],[44.103,-123.049]]]},"Owyhee River":{"segments":[[[42.068,-117.285],[42.102,-117.248],[42.143,-117.215],[42.185,-117.186],[42.23,-117.161],[42.278,-117.141],[42.327,-117.125],[42.378,-117.113],[42.43,-117.105],[42.482,-117.1],[42.534,-117.098],[42.587,-117.099],[42.639,-117.102],[42.69,-117.108],[42.741,-117.116],[42.791,-117.128],[42.839,-117.142],[42.887,-117.158],[42.934,-117.175],[42.98,-117.193],[43.026,-117.213],[43.07,-117.234],[43.113,-117.257]]]},"Illinois River":{"segments":[[[42.102,-123.497],[42.125,-123.468],[42.152,-123.441],[42.181,-123.417],[42.213,-123.396],[42.247,-123.377],[42.281,-123.358],[42.316,-123.34],[42.35,-123.321],[42.384,-123.3],[42.415,-123.275],[42.444,-123.248],[42.47,-123.218],[42.493,-123.185],[42.511,-123.15],[42.526,-123.112]]]},"Nehalem River":{"segments":[[[45.72,-123.92],[45.709,-123.854],[45.697,-123.788],[45.683,-123.723],[45.669,-123.659],[45.654,-123.596],[45.638,-123.534],[45.621,-123.474],[45.603,-123.415],[45.584,-123.358],[45.564,-123.303],[45.543,-123.25],[45.521,-123.199],[45.498,-123.15],[45.474,-123.103],[45.45,-123.057],[45.427,-123.012],[45.404,-122.968],[45.382,-122.924],[45.361,-122.88],[45.342,-122.836]]]},"Siletz River":{"segments":[[[44.905,-124.0],[44.893,-123.944],[44.882,-123.887],[44.872,-123.83],[44.863,-123.772],[44.856,-123.715],[44.85,-123.657],[44.845,-123.599],[44.841,-123.541],[44.838,-123.483],[44.836,-123.425],[44.835,-123.367],[44.835,-123.309],[44.836,-123.251],[44.838,-123.193],[44.841,-123.135],[44.845,-123.077],[44.85,-123.02]]]},"Coquille River":{"segments":[[[43.177,-124.196],[43.179,-124.13],[43.182,-124.065],[43.186,-123.999],[43.191,-123.934],[43.197,-123.869],[43.205,-123.804],[43.213,-123.74],[43.222,-123.677],[43.233,-123.614],[43.244,-123.552],[43.257,-123.491],[43.27,-123.431],[43.284,-123.372],[43.299,-123.313],[43.314,-123.254],[43.331,-123.196],[43.348,-123.139]]]},"Malheur River":{"segments":[[[43.976,-117.019],[43.942,-117.083],[43.908,-117.147],[43.874,-117.211],[43.84,-117.274],[43.806,-117.337],[43.772,-117.399],[43.738,-117.46],[43.704,-117.521],[43.671,-117.581],[43.639,-117.641],[43.607,-117.701],[43.576,-117.761],[43.546,-117.822],[43.517,-117.883],[43.49,-117.945],[43.464,-118.008],[43.44,-118.072],[43.418,-118.137],[43.398,-118.203],[43.38,-118.27]]]},"Columbia River":{"segments":[[[45.617,-121.175],[45.638,-121.25],[45.651,-121.332],[45.659,-121.415],[45.664,-121.498],[45.667,-121.581],[45.669,-121.664],[45.671,-121.747],[45.672,-121.831],[45.673,-121.914],[45.674,-121.997],[45.675,-122.081],[45.675,-122.165],[45.676,-122.248],[45.676,-122.332],[45.676,-122.415],[45.676,-122.499],[45.675,-122.582],[45.674,-122.665],[45.673,-122.748],[45.671,-122.831],[45.668,-122.913],[45.665,-122.995],[45.661,-123.077],[45.656,-123.159],[45.651,-123.241],[45.645,-123.322],[45.639,-123.403],[45.634,-123.484],[45.63,-123.566],[45.628,-123.648],[45.627,-123.73],[45.626,-123.812],[45.627,-123.894],[45.628,-123.96]]]},"Siuslaw River":{"segments":[[[43.948,-124.104],[43.944,-124.038],[43.94,-123.972],[43.937,-123.906],[43.935,-123.84],[43.933,-123.774],[43.933,-123.708],[43.933,-123.642],[43.934,-123.576],[43.937,-123.51],[43.94,-123.444],[43.944,-123.378],[43.949,-123.313],[43.954,-123.248],[43.96,-123.183],[43.967,-123.119],[43.974,-123.055],[43.982,-122.992]]]},"Yamhill River":{"segments":[[[45.336,-123.193],[45.316,-123.148],[45.296,-123.104],[45.276,-123.06],[45.255,-123.017],[45.234,-122.975],[45.212,-122.933],[45.19,-122.893],[45.167,-122.854],[45.144,-122.816],[45.121,-122.779],[45.098,-122.744],[45.075,-122.71],[45.053,-122.677]]]},"Tualatin River":{"segments":[[[45.385,-122.748],[45.376,-122.791],[45.367,-122.834],[45.358,-122.877],[45.348,-122.919],[45.338,-122.961],[45.327,-123.002],[45.315,-123.043],[45.303,-123.083],[45.29,-123.123],[45.277,-123.162],[45.263,-123.201],[45.249,-123.239],[45.235,-123.277],[45.22,-123.315],[45.205,-123.352],[45.19,-123.389],[45.175,-123.425],[45.161,-123.462],[45.148,-123.499]]]},"Santiam River":{"segments":[[[44.712,-122.849],[44.704,-122.905],[44.698,-122.962],[44.693,-123.019],[44.689,-123.077],[44.686,-123.134],[44.684,-123.192],[44.683,-123.249],[44.683,-123.307],[44.683,-123.363]]]}};
 
 const RIVER_DATA = {
   "Willamette River":  { region:"Northwest Oregon",     status:"good",    statusLabel:"Prime Fishing", note:"Great steelhead conditions. Flows slightly above average for the season.",         lat:45.52, lon:-122.67, usgsId:"14211720", nwrfcId:"PDXO3", city:"Portland, OR" },
@@ -565,26 +550,29 @@ const RIVER_DATA = {
 const STATUS_COLORS = { good:'#2A9FD6', caution:'#2A9FD6', high:'#2A9FD6', low:'#2A9FD6' };
 const DEFAULT_COLOR = '#2A9FD6';
 
-const map = L.map('map', { center:[44.0,-120.5], zoom:7, zoomControl:false });
-L.control.zoom({ position:'bottomright' }).addTo(map);
+const map = L.map('map', { center:[44.0,-120.5], zoom:7 });
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution:'© OpenStreetMap',
-  maxZoom:18
+  attribution:'© <a href="https://openstreetmap.org">OpenStreetMap</a> contributors', maxZoom:18
 }).addTo(map);
-document.querySelector('.leaflet-tile-pane').style.filter = 'brightness(.32) saturate(.25) hue-rotate(185deg)';
 
-const layers = {};
+let activeLayer = null;
 
 function drawSegments(name, segments) {
-  const r = RIVER_DATA[name];
-  const color = r ? (STATUS_COLORS[r.status] || DEFAULT_COLOR) : DEFAULT_COLOR;
+  const data = RIVER_DATA[name];
+  const color = data ? STATUS_COLORS[data.status] : DEFAULT_COLOR;
   segments.forEach(coords => {
-    const pl = L.polyline(coords, { color, weight:3, opacity:.85 }).addTo(map);
-    pl.on('click', () => r && showPanel(name, r));
-    pl.on('mouseover', function() { this.setStyle({ weight:5, opacity:1 }); });
-    pl.on('mouseout',  function() { this.setStyle({ weight:3, opacity:.85 }); });
-    if (!layers[name]) layers[name] = [];
-    layers[name].push(pl);
+    if (coords.length < 2) return;
+    L.polyline(coords, { color, weight:10, opacity:.12, lineJoin:'round' }).addTo(map);
+    const poly = L.polyline(coords, { color, weight:3.5, opacity:.9, lineJoin:'round', lineCap:'round' }).addTo(map);
+    poly.bindTooltip(name, { className:'river-tooltip', sticky:true, offset:[10,0] });
+    poly.on('mouseover', () => { if(poly!==activeLayer) poly.setStyle({weight:6,opacity:1}); });
+    poly.on('mouseout',  () => { if(poly!==activeLayer) poly.setStyle({weight:3.5,opacity:.9}); });
+    poly.on('click', () => {
+      if(activeLayer && activeLayer!==poly) activeLayer.setStyle({weight:3.5,opacity:.9});
+      activeLayer = poly;
+      poly.setStyle({weight:7,opacity:1});
+      if(data) showPanel(name, data);
+    });
   });
 }
 
@@ -601,31 +589,35 @@ function drawFromOSM(elements) {
     if (!byName[name]) byName[name] = [];
     byName[name].push(el.geometry.map(p => [p.lat, p.lon]));
   });
-  console.log('Drew OSM segments for rivers:', Object.keys(byName));
+  console.log(`Drew ${elements.length} OSM segments for rivers:`, Object.keys(byName));
   Object.entries(byName).forEach(([name, segments]) => drawSegments(name, segments));
-}
-
-function setStatus(msg) {
-  const el = document.getElementById('load-status');
-  if (el) el.textContent = msg;
 }
 
 async function loadRivers() {
   const loading = document.getElementById('loading');
-  const riverNames = Object.keys(RIVER_DATA);
+  const setStatus = t => document.getElementById('load-status').textContent = t;
+
+  const riverNames = Object.keys(RIVER_DATA).concat([
+    "Columbia River","Snake River","Siuslaw River","Alsea River",
+    "Tillamook River","Yamhill River","Tualatin River","Santiam River",
+    "Molalla River","Calapooia River","Long Tom River"
+  ]);
   const bbox = "41.9,-124.7,46.3,-116.4";
+
+  // Split into batches of 5 to avoid Overpass timeout
   const batchSize = 5;
   const batches = [];
   for (let i = 0; i < riverNames.length; i += batchSize) {
     batches.push(riverNames.slice(i, i + batchSize));
   }
 
+  setStatus('Loading accurate river data from OpenStreetMap…');
   let allElements = [];
   let anySuccess = false;
 
   for (let i = 0; i < batches.length; i++) {
     const batch = batches[i];
-    setStatus(`Loading river data… (${i+1}/${batches.length})`);
+    setStatus(`Loading rivers… (${i+1}/${batches.length})`);
     const filters = batch.map(n => `way["waterway"="river"]["name"="${n}"](${bbox});`).join('');
     const query = '[out:json][timeout:30];(' + filters + ');out geom;';
     try {
@@ -657,7 +649,7 @@ async function loadRivers() {
   document.getElementById('map-hint').classList.remove('hidden');
 }
 
-// ── NWS weather icon mapping
+// ── NWS weather icon mapping ────────────────────────────────────────────────
 function nwsIcon(shortForecast, tempF) {
   const f = shortForecast.toLowerCase();
   const cold = tempF <= 35;
@@ -690,9 +682,10 @@ function nwsSimple(shortForecast, tempF) {
   return 'Mixed';
 }
 
-// ── USGS live data
+// ── USGS live data ────────────────────────────────────────────────────────────
 async function fetchUSGS(siteId) {
   const result = {};
+  // Fetch flow and temp separately so one missing param doesn't break the other
   try {
     const flowRes  = await fetch(`https://waterservices.usgs.gov/nwis/iv/?format=json&sites=${siteId}&parameterCd=00060&siteStatus=active`);
     const flowJson = await flowRes.json();
@@ -710,29 +703,33 @@ async function fetchUSGS(siteId) {
   return result;
 }
 
-// ── NWS 5-day weather
+// ── NWS 5-day weather ─────────────────────────────────────────────────────────
 async function fetchWeather(lat, lon) {
   try {
     const ptRes  = await fetch(`https://api.weather.gov/points/${lat},${lon}`);
     const ptJson = await ptRes.json();
     const fRes   = await fetch(ptJson.properties.forecast);
     const fJson  = await fRes.json();
-    return fJson.properties.periods.slice(0, 10);
+    return fJson.properties.periods.slice(0, 10); // day + night pairs
   } catch(e) { return []; }
 }
 
-// ── SHOW PANEL
+// ── SHOW PANEL ────────────────────────────────────────────────────────────────
 async function showPanel(name, r) {
   document.getElementById('map-hint').classList.add('hidden');
   document.getElementById('panel-name').textContent   = name;
   document.getElementById('panel-region').textContent = r.region;
-  document.getElementById('weather-title').textContent = `🌤️ Forecast — ${r.city}`;
+
+
   document.getElementById('data-panel').classList.add('open');
 
+  // Reset columns to loading state
   document.getElementById('stat-cards').innerHTML   = '<div class="stat-loading">⏳ Fetching live data…</div>';
+  document.getElementById('weather-title').textContent = `🌤️ Forecast — ${r.city}`;
   document.getElementById('weather-cards').innerHTML = '<div class="stat-loading">⏳ Fetching forecast…</div>';
   document.getElementById('hydro-wrap').innerHTML    = '<div class="stat-loading">⏳ Loading chart…</div>';
 
+  // ── Fetch USGS live data ──
   const usgs = await fetchUSGS(r.usgsId);
   const stats = [
     { label:'Flow Rate',  value: usgs.flow || '—', unit:'cfs' },
@@ -742,10 +739,13 @@ async function showPanel(name, r) {
     <div class="stat-card">
       <div class="stat-label">${s.label}</div>
       <div class="stat-value">${s.value} <span class="stat-unit">${s.unit}</span></div>
-    </div>`).join('');
+    </div>`).join('') +
+    ``;  // note removed
 
+  // ── Fetch NWS 5-day forecast ──
   const periods = await fetchWeather(r.lat, r.lon);
   if (periods.length > 0) {
+    // Take daytime periods only (isDaytime=true), up to 5
     const days = periods.filter(p => p.isDaytime).slice(0, 5);
     document.getElementById('weather-cards').innerHTML =
       '<div class="weather-row">' +
@@ -761,6 +761,7 @@ async function showPanel(name, r) {
     document.getElementById('weather-cards').innerHTML = '<div class="stat-loading">Forecast unavailable</div>';
   }
 
+  // ── USGS chart embed + external links ──
   const usgsChartSrc = `https://waterdata.usgs.gov/nwisweb/graph?agency_cd=USGS&site_no=${r.usgsId}&parm_cd=00065&period=7&format=gif_default`;
   const usgsPageUrl  = `https://waterdata.usgs.gov/monitoring-location/${r.usgsId}/`;
   const nwrfcUrl     = r.nwrfcId ? `https://www.nwrfc.noaa.gov/station/flowplot/hydroPlot.php?id=${r.nwrfcId}&pe=HG` : null;
@@ -774,12 +775,12 @@ async function showPanel(name, r) {
       <div style="display:none;font-size:.75rem;color:var(--text-dim);text-align:center;padding:12px;">Chart unavailable for this gauge</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
         <a href="${usgsPageUrl}" target="_blank" rel="noopener"
-          style="flex:1;text-align:center;padding:7px 10px;border-radius:8px;border:1px solid rgba(42,159,214,.25);background:rgba(42,159,214,.07);color:var(--sky);font-size:.72rem;font-weight:800;text-decoration:none;"
+          style="flex:1;text-align:center;padding:7px 10px;border-radius:8px;border:1px solid rgba(42,159,214,.25);background:rgba(42,159,214,.07);color:var(--sky);font-size:.72rem;font-weight:800;text-decoration:none;transition:border-color .2s;"
           onmouseover="this.style.borderColor='var(--cerulean)'" onmouseout="this.style.borderColor='rgba(42,159,214,.25)'">
           📊 USGS Gauge Page ↗
         </a>
         ${nwrfcUrl ? `<a href="${nwrfcUrl}" target="_blank" rel="noopener"
-          style="flex:1;text-align:center;padding:7px 10px;border-radius:8px;border:1px solid rgba(42,159,214,.25);background:rgba(42,159,214,.07);color:var(--sky);font-size:.72rem;font-weight:800;text-decoration:none;"
+          style="flex:1;text-align:center;padding:7px 10px;border-radius:8px;border:1px solid rgba(42,159,214,.25);background:rgba(42,159,214,.07);color:var(--sky);font-size:.72rem;font-weight:800;text-decoration:none;transition:border-color .2s;"
           onmouseover="this.style.borderColor='var(--cerulean)'" onmouseout="this.style.borderColor='rgba(42,159,214,.25)'">
           📈 NOAA Hydrograph ↗
         </a>` : ''}
@@ -789,15 +790,17 @@ async function showPanel(name, r) {
 
 function closePanel() {
   document.getElementById('data-panel').classList.remove('open');
+  if(activeLayer) { activeLayer.setStyle({weight:3.5,opacity:.9}); activeLayer=null; }
   document.getElementById('map-hint').classList.remove('hidden');
 }
+
 
 function showTab(e, tab) {
   e.preventDefault();
   document.querySelectorAll('.tab-panel').forEach(p => p.style.display = 'none');
   document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
   document.getElementById('tab-' + tab).style.display = tab === 'map' ? 'flex' : 'block';
-  e.currentTarget.classList.add('active');
+  e.target.classList.add('active');
 }
 
 loadRivers();
