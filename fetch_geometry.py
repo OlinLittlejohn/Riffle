@@ -19,8 +19,9 @@ import re
 
 # Add new rivers here whenever you expand the map
 NEW_RIVERS = [
-    "Columbia River",
-    "Snake River",
+    "Umatilla River",
+    "Wilson River",
+    "Siuslaw River",
 ]
 
 BBOX = "41.9,-124.7,46.5,-116.4"  # slightly expanded north for Snake/Columbia
